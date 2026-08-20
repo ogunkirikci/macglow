@@ -5,6 +5,8 @@ final class GlowOverlayController {
     private var panels: [NSPanel] = []
     private var isVisible = true
     private var isLifecycleSuppressed = false
+    private var liveLevel = 0.0
+    private var previewLevel: Double?
     private let settings: GlowSettings
 
     init(settings: GlowSettings) {
@@ -47,9 +49,25 @@ final class GlowOverlayController {
     }
 
     func update(level: Double) {
+        liveLevel = clamped(level)
+        applyDisplayedLevel()
+    }
+
+    func setPreview(level: Double?) {
+        previewLevel = level.map(clamped)
+        applyDisplayedLevel()
+        applyVisibility()
+    }
+
+    private func applyDisplayedLevel() {
+        let level = previewLevel ?? liveLevel
         for panel in panels {
-            (panel.contentView as? GlowOverlayView)?.level = min(max(level, 0), 1)
+            (panel.contentView as? GlowOverlayView)?.level = level
         }
+    }
+
+    private func clamped(_ level: Double) -> Double {
+        min(max(level, 0), 1)
     }
 
     private func update(appearance: GlowAppearance) {
@@ -70,11 +88,12 @@ final class GlowOverlayController {
                 return settings.isDisplayEnabled(displayID)
             }
             .map(makePanel)
+        applyDisplayedLevel()
         applyVisibility()
     }
 
     private func applyVisibility() {
-        let shouldShow = isVisible && !isLifecycleSuppressed
+        let shouldShow = previewLevel != nil || (isVisible && !isLifecycleSuppressed)
         panels.forEach { panel in
             shouldShow ? panel.orderFrontRegardless() : panel.orderOut(nil)
         }

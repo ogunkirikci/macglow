@@ -23,6 +23,14 @@ enum GlowPreset: String, CaseIterable, Identifiable {
     case aurora
     case sunset
     case ocean
+    case cyberpunk
+    case lavender
+    case forest
+    case ember
+    case arctic
+    case candy
+    case ultraviolet
+    case monochrome
 
     var id: String { rawValue }
 
@@ -348,6 +356,86 @@ final class GlowSettings: ObservableObject {
             audioAttack = 0.40
             audioRelease = 0.07
             audioGain = 3.8
+        case .cyberpunk:
+            intensity = 0.92
+            spread = 58
+            topColor = NSColor(srgbRed: 0.00, green: 0.95, blue: 1.00, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.12, green: 0.34, blue: 1.00, alpha: 1)
+            bottomColor = NSColor(srgbRed: 1.00, green: 0.00, blue: 0.62, alpha: 1)
+            leftColor = NSColor(srgbRed: 0.72, green: 0.00, blue: 1.00, alpha: 1)
+            audioAttack = 0.72
+            audioRelease = 0.16
+            audioGain = 4.5
+        case .lavender:
+            intensity = 0.58
+            spread = 112
+            topColor = NSColor(srgbRed: 0.78, green: 0.68, blue: 1.00, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.58, green: 0.44, blue: 0.98, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.95, green: 0.56, blue: 0.86, alpha: 1)
+            leftColor = NSColor(srgbRed: 0.68, green: 0.74, blue: 1.00, alpha: 1)
+            audioAttack = 0.32
+            audioRelease = 0.06
+            audioGain = 2.6
+        case .forest:
+            intensity = 0.66
+            spread = 96
+            topColor = NSColor(srgbRed: 0.12, green: 0.86, blue: 0.46, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.02, green: 0.58, blue: 0.38, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.04, green: 0.32, blue: 0.24, alpha: 1)
+            leftColor = NSColor(srgbRed: 0.46, green: 0.88, blue: 0.18, alpha: 1)
+            audioAttack = 0.38
+            audioRelease = 0.08
+            audioGain = 3.1
+        case .ember:
+            intensity = 0.88
+            spread = 70
+            topColor = NSColor(srgbRed: 1.00, green: 0.72, blue: 0.10, alpha: 1)
+            rightColor = NSColor(srgbRed: 1.00, green: 0.32, blue: 0.02, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.78, green: 0.03, blue: 0.01, alpha: 1)
+            leftColor = NSColor(srgbRed: 1.00, green: 0.12, blue: 0.03, alpha: 1)
+            audioAttack = 0.62
+            audioRelease = 0.14
+            audioGain = 4.0
+        case .arctic:
+            intensity = 0.62
+            spread = 124
+            topColor = NSColor(srgbRed: 0.72, green: 0.96, blue: 1.00, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.28, green: 0.72, blue: 1.00, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.16, green: 0.42, blue: 0.92, alpha: 1)
+            leftColor = NSColor(srgbRed: 0.44, green: 0.98, blue: 0.92, alpha: 1)
+            audioAttack = 0.34
+            audioRelease = 0.05
+            audioGain = 2.9
+        case .candy:
+            intensity = 0.74
+            spread = 86
+            topColor = NSColor(srgbRed: 1.00, green: 0.48, blue: 0.76, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.72, green: 0.42, blue: 1.00, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.30, green: 0.82, blue: 1.00, alpha: 1)
+            leftColor = NSColor(srgbRed: 1.00, green: 0.70, blue: 0.36, alpha: 1)
+            audioAttack = 0.50
+            audioRelease = 0.10
+            audioGain = 3.5
+        case .ultraviolet:
+            intensity = 0.82
+            spread = 76
+            topColor = NSColor(srgbRed: 0.46, green: 0.06, blue: 1.00, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.74, green: 0.02, blue: 1.00, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.98, green: 0.06, blue: 0.70, alpha: 1)
+            leftColor = NSColor(srgbRed: 0.22, green: 0.08, blue: 0.82, alpha: 1)
+            audioAttack = 0.56
+            audioRelease = 0.12
+            audioGain = 3.9
+        case .monochrome:
+            intensity = 0.52
+            spread = 104
+            topColor = NSColor(srgbRed: 1.00, green: 1.00, blue: 1.00, alpha: 1)
+            rightColor = NSColor(srgbRed: 0.76, green: 0.80, blue: 0.86, alpha: 1)
+            bottomColor = NSColor(srgbRed: 0.48, green: 0.52, blue: 0.60, alpha: 1)
+            leftColor = NSColor(srgbRed: 0.88, green: 0.90, blue: 0.94, alpha: 1)
+            audioAttack = 0.42
+            audioRelease = 0.08
+            audioGain = 3.0
         }
     }
 

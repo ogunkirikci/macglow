@@ -2,6 +2,8 @@ import AppKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private static let anyInputEventType = CGEventType(rawValue: UInt32.max)!
+    private let musicReactiveFloor = 0.12
     private let settings = GlowSettings()
     private let displayCatalog = DisplayCatalog()
     private let permissionStatus = PermissionStatusStore()
@@ -16,17 +18,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         nowPlaying: nowPlaying,
         openSystemAudioSettings: { [weak self] in
             self?.openAudioPrivacySettings()
+        },
+        previewGlow: { [weak self] in
+            self?.startTemporaryPreview()
         }
     )
     private var statusItem: NSStatusItem?
     private var audioStatusItem: NSMenuItem?
-    private var previewMenuItem: NSMenuItem?
     private var retryMenuItem: NSMenuItem?
     private var privacyMenuItem: NSMenuItem?
     private var audioCapture: AnyObject?
     private var retryAudioWhenActive = false
     private var previewTimer: Timer?
     private var previewPhase: Double = 0
+    private var temporaryPreviewTimer: Timer?
+    private var temporaryPreviewPhase: Double = 0
+    private var temporaryPreviewEndDate = Date.distantPast
     private var isPausedForSleep = false
     private var lifecycleTimer: Timer?
 
@@ -56,6 +63,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        stopTemporaryPreview()
         previewTimer?.invalidate()
         settings.onAnimationModeChange = nil
         settings.onAudioResponseChange = nil
@@ -126,12 +134,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             )
         )
         let previewItem = NSMenuItem(
-            title: "Preview Pulse",
-            action: #selector(togglePreviewSignal),
+            title: "Preview Glow",
+            action: #selector(previewGlow),
             keyEquivalent: "p"
         )
         menu.addItem(previewItem)
-        previewMenuItem = previewItem
         menu.addItem(.separator())
         menu.addItem(
             NSMenuItem(
@@ -147,6 +154,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func startSystemAudioCapture() {
         stopPreviewSignal()
+        overlayController.update(level: musicReactiveFloor)
 
         guard #available(macOS 14.2, *) else {
             permissionStatus.systemAudio = .unavailable
@@ -158,7 +166,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         capture.updateResponse(settings.audioResponse)
         capture.onFeatures = { [weak self] features in
             Task { @MainActor in
-                self?.overlayController.update(level: Double(features.level))
+                guard let self else { return }
+                self.overlayController.update(
+                    level: max(Double(features.level), self.musicReactiveFloor)
+                )
             }
         }
         capture.onStateChange = { [weak self] state in
@@ -219,7 +230,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func startPreviewSignal() {
         stopSystemAudioCapture()
         previewPhase = 0
-        previewMenuItem?.state = .on
         let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
         updateAudioStatus(reduceMotion ? "Mode: Pulse · Reduced Motion" : "Mode: Pulse", failed: false)
         previewTimer = Timer.scheduledTimer(withTimeInterval: 1 / 30, repeats: true) { [weak self] _ in
@@ -238,7 +248,37 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func stopPreviewSignal() {
         previewTimer?.invalidate()
         previewTimer = nil
-        previewMenuItem?.state = .off
+    }
+
+    private func startTemporaryPreview() {
+        stopTemporaryPreview()
+        temporaryPreviewPhase = 0
+        temporaryPreviewEndDate = Date().addingTimeInterval(4)
+        overlayController.setPreview(level: 0.9)
+
+        let timer = Timer(timeInterval: 1 / 30, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                guard Date() < self.temporaryPreviewEndDate else {
+                    self.stopTemporaryPreview()
+                    return
+                }
+                let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+                self.temporaryPreviewPhase += reduceMotion ? 0.025 : 0.08
+                let carrier = (sin(self.temporaryPreviewPhase) + 1) / 2
+                let pulse = pow(carrier, 3)
+                let level = reduceMotion ? 0.65 + pulse * 0.2 : 0.38 + pulse * 0.62
+                self.overlayController.setPreview(level: level)
+            }
+        }
+        temporaryPreviewTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    private func stopTemporaryPreview() {
+        temporaryPreviewTimer?.invalidate()
+        temporaryPreviewTimer = nil
+        overlayController.setPreview(level: nil)
     }
 
     @objc private func toggleGlow() {
@@ -249,8 +289,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindowController.show()
     }
 
-    @objc private func togglePreviewSignal() {
-        settings.animationMode = settings.animationMode == .pulse ? .musicReactive : .pulse
+    @objc private func previewGlow() {
+        startTemporaryPreview()
     }
 
     @objc private func retryAudioCapture() {
@@ -330,8 +370,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let policy = settings.lifecycle
+        let idleSeconds = CGEventSource.secondsSinceLastEventType(
+            .combinedSessionState,
+            eventType: Self.anyInputEventType
+        )
         let isIdle = policy.hideWhenIdle
-            && CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: .null) >= policy.idleDelay
+            && idleSeconds.isFinite
+            && idleSeconds >= policy.idleDelay
         let isFullScreen = policy.hideInFullScreen && frontmostApplicationIsFullScreen()
         overlayController.setLifecycleSuppressed(isIdle || isFullScreen)
     }
@@ -362,6 +407,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func workspaceWillSleep() {
         isPausedForSleep = true
+        stopTemporaryPreview()
         overlayController.setLifecycleSuppressed(true)
         stopPreviewSignal()
         stopSystemAudioCapture()

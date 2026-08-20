@@ -8,6 +8,7 @@ struct SettingsView: View {
     @ObservedObject var launchAtLogin: LaunchAtLoginController
     @ObservedObject var nowPlaying: NowPlayingController
     let openSystemAudioSettings: () -> Void
+    let previewGlow: () -> Void
     let importPreset: () -> Void
     let exportPreset: () -> Void
 
@@ -30,6 +31,7 @@ struct SettingsView: View {
                             ForEach(GlowPreset.allCases) { preset in
                                 Button(preset.title) {
                                     settings.applyPreset(preset)
+                                    previewGlow()
                                 }
                             }
                         }
@@ -43,6 +45,21 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Check the current look")
+                                .fontWeight(.medium)
+                            Text("Shows the glow for four seconds, even when audio is silent or idle hiding is active.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer(minLength: 12)
+                        Button(action: previewGlow) {
+                            Label("Preview Glow", systemImage: "sparkles")
+                        }
+                        .keyboardShortcut("p", modifiers: [.command])
+                    }
 
                     settingSlider(
                         title: "Width",

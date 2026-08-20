@@ -142,13 +142,14 @@ final class SystemAudioCapture: @unchecked Sendable {
     private func createAggregateDevice() throws {
         let aggregateUID = "org.macglow.audio-device.\(UUID().uuidString)"
         let description: [String: Any] = [
-            "name": "MacGlow Private Audio Device",
-            "uid": aggregateUID,
-            "private": true,
-            "taps": [
+            kAudioAggregateDeviceNameKey: "MacGlow Private Audio Device",
+            kAudioAggregateDeviceUIDKey: aggregateUID,
+            kAudioAggregateDeviceIsPrivateKey: true,
+            kAudioAggregateDeviceTapAutoStartKey: true,
+            kAudioAggregateDeviceTapListKey: [
                 [
-                    "uid": tapUID,
-                    "drift": true
+                    kAudioSubTapUIDKey: tapUID,
+                    kAudioSubTapDriftCompensationKey: true
                 ]
             ]
         ]

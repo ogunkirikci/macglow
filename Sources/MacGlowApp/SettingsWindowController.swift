@@ -10,6 +10,7 @@ final class SettingsWindowController {
     private let launchAtLogin: LaunchAtLoginController
     private let nowPlaying: NowPlayingController
     private let openSystemAudioSettings: () -> Void
+    private let previewGlow: () -> Void
     private var window: NSWindow?
 
     init(
@@ -18,7 +19,8 @@ final class SettingsWindowController {
         permissionStatus: PermissionStatusStore,
         launchAtLogin: LaunchAtLoginController,
         nowPlaying: NowPlayingController,
-        openSystemAudioSettings: @escaping () -> Void
+        openSystemAudioSettings: @escaping () -> Void,
+        previewGlow: @escaping () -> Void
     ) {
         self.settings = settings
         self.displayCatalog = displayCatalog
@@ -26,6 +28,7 @@ final class SettingsWindowController {
         self.launchAtLogin = launchAtLogin
         self.nowPlaying = nowPlaying
         self.openSystemAudioSettings = openSystemAudioSettings
+        self.previewGlow = previewGlow
     }
 
     func show() {
@@ -46,6 +49,7 @@ final class SettingsWindowController {
                 launchAtLogin: launchAtLogin,
                 nowPlaying: nowPlaying,
                 openSystemAudioSettings: openSystemAudioSettings,
+                previewGlow: previewGlow,
                 importPreset: { [weak self] in self?.importPreset() },
                 exportPreset: { [weak self] in self?.exportPreset() }
             )
