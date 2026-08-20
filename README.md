@@ -22,7 +22,7 @@ extraction, launch at login, and sleep/idle/full-screen lifecycle handling.
 
 - Apple silicon Mac (primary) or an Intel Mac for best-effort support
 - macOS 14.2 or newer for the planned CoreAudio Process Tap integration
-- Swift 6.2+
+- Swift 6.1+
 - Xcode 26+ recommended
 
 ## Run the development preview
