@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift tests
+        run: swift test
+      - name: Build app without signing
+        run: >-
+          xcodebuild -project MacGlow.xcodeproj -scheme MacGlow
+          -configuration Release -destination 'generic/platform=macOS'
+          -derivedDataPath Build/CI CODE_SIGNING_ALLOWED=NO build

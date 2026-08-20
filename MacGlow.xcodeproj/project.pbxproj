@@ -1,0 +1,234 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B00000000000000000000001 /* AudioFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000001 /* AudioFeatures.swift */; };
+		B00000000000000000000002 /* AudioFrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000002 /* AudioFrameAnalyzer.swift */; };
+		B00000000000000000000003 /* GlowConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000003 /* GlowConfiguration.swift */; };
+		B00000000000000000000004 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000004 /* main.swift */; };
+		B00000000000000000000005 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000005 /* AppDelegate.swift */; };
+		B00000000000000000000006 /* GlowOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000006 /* GlowOverlayController.swift */; };
+		B00000000000000000000007 /* GlowOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000007 /* GlowOverlayView.swift */; };
+		B00000000000000000000008 /* SystemAudioCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000008 /* SystemAudioCapture.swift */; };
+		B00000000000000000000009 /* GlowSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000009 /* GlowSettings.swift */; };
+		B0000000000000000000000A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000A /* SettingsView.swift */; };
+		B0000000000000000000000B /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000B /* SettingsWindowController.swift */; };
+		B0000000000000000000000C /* PrivacySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000C /* PrivacySettings.swift */; };
+		B0000000000000000000000D /* AudioFrameAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000D /* AudioFrameAnalyzerTests.swift */; };
+		B0000000000000000000000E /* GlowConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000E /* GlowConfigurationTests.swift */; };
+		B0000000000000000000000F /* MacGlowCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00000000000000000000012 /* MacGlowCore.framework */; };
+		B00000000000000000000010 /* MacGlowCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C00000000000000000000012 /* MacGlowCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B00000000000000000000011 /* MacGlowCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00000000000000000000012 /* MacGlowCore.framework */; };
+		B00000000000000000000012 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00000000000000000000014 /* XCTest.framework */; };
+		B00000000000000000000013 /* DisplayCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000015 /* DisplayCatalog.swift */; };
+		B00000000000000000000014 /* LaunchAtLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000016 /* LaunchAtLoginController.swift */; };
+		B00000000000000000000015 /* GlowPresetFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000017 /* GlowPresetFile.swift */; };
+		B00000000000000000000016 /* GlowPresetFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000018 /* GlowPresetFileTests.swift */; };
+		B00000000000000000000017 /* MetalGlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000019 /* MetalGlowView.swift */; };
+		B00000000000000000000018 /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000001A /* NowPlayingController.swift */; };
+		B00000000000000000000019 /* DominantColorExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000001B /* DominantColorExtractor.swift */; };
+		B0000000000000000000001A /* DominantColorExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000001C /* DominantColorExtractorTests.swift */; };
+		B0000000000000000000001B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000001D /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		J00000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F00000000000000000000002;
+			remoteInfo = MacGlowCore;
+		};
+		J00000000000000000000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F00000000000000000000002;
+			remoteInfo = MacGlowCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E00000000000000000000008 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B00000000000000000000010 /* MacGlowCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C00000000000000000000001 /* AudioFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFeatures.swift; sourceTree = "<group>"; };
+		C00000000000000000000002 /* AudioFrameAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFrameAnalyzer.swift; sourceTree = "<group>"; };
+		C00000000000000000000003 /* GlowConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowConfiguration.swift; sourceTree = "<group>"; };
+		C00000000000000000000004 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		C00000000000000000000005 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C00000000000000000000006 /* GlowOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowOverlayController.swift; sourceTree = "<group>"; };
+		C00000000000000000000007 /* GlowOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowOverlayView.swift; sourceTree = "<group>"; };
+		C00000000000000000000008 /* SystemAudioCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemAudioCapture.swift; sourceTree = "<group>"; };
+		C00000000000000000000009 /* GlowSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowSettings.swift; sourceTree = "<group>"; };
+		C0000000000000000000000A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C0000000000000000000000B /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		C0000000000000000000000C /* PrivacySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettings.swift; sourceTree = "<group>"; };
+		C0000000000000000000000D /* AudioFrameAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFrameAnalyzerTests.swift; sourceTree = "<group>"; };
+		C0000000000000000000000E /* GlowConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowConfigurationTests.swift; sourceTree = "<group>"; };
+		C0000000000000000000000F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C00000000000000000000010 /* MacGlow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacGlow.entitlements; sourceTree = "<group>"; };
+		C00000000000000000000011 /* MacGlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacGlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C00000000000000000000012 /* MacGlowCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacGlowCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C00000000000000000000013 /* MacGlowCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacGlowCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C00000000000000000000014 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = System/Library/Frameworks/XCTest.framework; sourceTree = SDKROOT; };
+		C00000000000000000000015 /* DisplayCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayCatalog.swift; sourceTree = "<group>"; };
+		C00000000000000000000016 /* LaunchAtLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginController.swift; sourceTree = "<group>"; };
+		C00000000000000000000017 /* GlowPresetFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowPresetFile.swift; sourceTree = "<group>"; };
+		C00000000000000000000018 /* GlowPresetFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowPresetFileTests.swift; sourceTree = "<group>"; };
+		C00000000000000000000019 /* MetalGlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalGlowView.swift; sourceTree = "<group>"; };
+		C0000000000000000000001A /* NowPlayingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingController.swift; sourceTree = "<group>"; };
+		C0000000000000000000001B /* DominantColorExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DominantColorExtractor.swift; sourceTree = "<group>"; };
+		C0000000000000000000001C /* DominantColorExtractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DominantColorExtractorTests.swift; sourceTree = "<group>"; };
+		C0000000000000000000001D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E00000000000000000000002 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (B0000000000000000000000F /* MacGlowCore.framework in Frameworks */, ); runOnlyForDeploymentPostprocessing = 0; };
+		E00000000000000000000004 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		E00000000000000000000006 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000011 /* MacGlowCore.framework in Frameworks */, B00000000000000000000012 /* XCTest.framework in Frameworks */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D00000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				D00000000000000000000002 /* Sources */,
+				D0000000000000000000000A /* Resources */,
+				D00000000000000000000005 /* Tests */,
+				D00000000000000000000007 /* Configuration */,
+				D00000000000000000000008 /* Frameworks */,
+				D00000000000000000000006 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D00000000000000000000002 /* Sources */ = {isa = PBXGroup; children = (D00000000000000000000003 /* MacGlowCore */, D00000000000000000000004 /* MacGlowApp */, ); path = Sources; sourceTree = "<group>"; };
+		D00000000000000000000003 /* MacGlowCore */ = {isa = PBXGroup; children = (C00000000000000000000001 /* AudioFeatures.swift */, C00000000000000000000002 /* AudioFrameAnalyzer.swift */, C00000000000000000000003 /* GlowConfiguration.swift */, C00000000000000000000017 /* GlowPresetFile.swift */, C0000000000000000000001B /* DominantColorExtractor.swift */, ); path = MacGlowCore; sourceTree = "<group>"; };
+		D00000000000000000000004 /* MacGlowApp */ = {isa = PBXGroup; children = (C00000000000000000000004 /* main.swift */, C00000000000000000000005 /* AppDelegate.swift */, C00000000000000000000006 /* GlowOverlayController.swift */, C00000000000000000000007 /* GlowOverlayView.swift */, C00000000000000000000019 /* MetalGlowView.swift */, C00000000000000000000008 /* SystemAudioCapture.swift */, C0000000000000000000001A /* NowPlayingController.swift */, C00000000000000000000009 /* GlowSettings.swift */, C0000000000000000000000A /* SettingsView.swift */, C0000000000000000000000B /* SettingsWindowController.swift */, C0000000000000000000000C /* PrivacySettings.swift */, C00000000000000000000015 /* DisplayCatalog.swift */, C00000000000000000000016 /* LaunchAtLoginController.swift */, ); path = MacGlowApp; sourceTree = "<group>"; };
+		D00000000000000000000005 /* Tests */ = {isa = PBXGroup; children = (D00000000000000000000009 /* MacGlowCoreTests */, ); path = Tests; sourceTree = "<group>"; };
+		D00000000000000000000006 /* Products */ = {isa = PBXGroup; children = (C00000000000000000000011 /* MacGlow.app */, C00000000000000000000012 /* MacGlowCore.framework */, C00000000000000000000013 /* MacGlowCoreTests.xctest */, ); name = Products; sourceTree = "<group>"; };
+		D00000000000000000000007 /* Configuration */ = {isa = PBXGroup; children = (C0000000000000000000000F /* Info.plist */, C00000000000000000000010 /* MacGlow.entitlements */, ); path = Configuration; sourceTree = "<group>"; };
+		D00000000000000000000008 /* Frameworks */ = {isa = PBXGroup; children = (C00000000000000000000014 /* XCTest.framework */, ); name = Frameworks; sourceTree = "<group>"; };
+		D00000000000000000000009 /* MacGlowCoreTests */ = {isa = PBXGroup; children = (C0000000000000000000000D /* AudioFrameAnalyzerTests.swift */, C0000000000000000000000E /* GlowConfigurationTests.swift */, C00000000000000000000018 /* GlowPresetFileTests.swift */, C0000000000000000000001C /* DominantColorExtractorTests.swift */, ); path = MacGlowCoreTests; sourceTree = "<group>"; };
+		D0000000000000000000000A /* Resources */ = {isa = PBXGroup; children = (C0000000000000000000001D /* Assets.xcassets */, ); path = Resources; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E00000000000000000000009 /* Headers */ = {isa = PBXHeadersBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F00000000000000000000001 /* MacGlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G00000000000000000000002 /* Build configuration list for PBXNativeTarget "MacGlow" */;
+			buildPhases = (E00000000000000000000001 /* Sources */, E00000000000000000000002 /* Frameworks */, E00000000000000000000003 /* Resources */, E00000000000000000000008 /* Embed Frameworks */, );
+			buildRules = ();
+			dependencies = (I00000000000000000000001 /* PBXTargetDependency */, );
+			name = MacGlow;
+			productName = MacGlow;
+			productReference = C00000000000000000000011 /* MacGlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F00000000000000000000002 /* MacGlowCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G00000000000000000000003 /* Build configuration list for PBXNativeTarget "MacGlowCore" */;
+			buildPhases = (E00000000000000000000009 /* Headers */, E00000000000000000000004 /* Frameworks */, E00000000000000000000005 /* Sources */, E0000000000000000000000A /* Resources */, );
+			buildRules = ();
+			dependencies = ();
+			name = MacGlowCore;
+			productName = MacGlowCore;
+			productReference = C00000000000000000000012 /* MacGlowCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F00000000000000000000003 /* MacGlowCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G00000000000000000000004 /* Build configuration list for PBXNativeTarget "MacGlowCoreTests" */;
+			buildPhases = (E00000000000000000000007 /* Sources */, E00000000000000000000006 /* Frameworks */, E0000000000000000000000B /* Resources */, );
+			buildRules = ();
+			dependencies = (I00000000000000000000002 /* PBXTargetDependency */, );
+			name = MacGlowCoreTests;
+			productName = MacGlowCoreTests;
+			productReference = C00000000000000000000013 /* MacGlowCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					F00000000000000000000001 = {CreatedOnToolsVersion = 26.6; };
+					F00000000000000000000002 = {CreatedOnToolsVersion = 26.6; };
+					F00000000000000000000003 = {CreatedOnToolsVersion = 26.6; TestTargetID = F00000000000000000000002; };
+				};
+			};
+			buildConfigurationList = G00000000000000000000001 /* Build configuration list for PBXProject "MacGlow" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base, );
+			mainGroup = D00000000000000000000001;
+			productRefGroup = D00000000000000000000006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (F00000000000000000000001 /* MacGlow */, F00000000000000000000002 /* MacGlowCore */, F00000000000000000000003 /* MacGlowCoreTests */, );
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E00000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (B0000000000000000000001B /* Assets.xcassets in Resources */, ); runOnlyForDeploymentPostprocessing = 0; };
+		E0000000000000000000000A /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		E0000000000000000000000B /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E00000000000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000004, B00000000000000000000005, B00000000000000000000006, B00000000000000000000007, B00000000000000000000017, B00000000000000000000008, B00000000000000000000018, B00000000000000000000009, B0000000000000000000000A, B0000000000000000000000B, B0000000000000000000000C, B00000000000000000000013, B00000000000000000000014, ); runOnlyForDeploymentPostprocessing = 0; };
+		E00000000000000000000005 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000001, B00000000000000000000002, B00000000000000000000003, B00000000000000000000015, B00000000000000000000019, ); runOnlyForDeploymentPostprocessing = 0; };
+		E00000000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B0000000000000000000000D, B0000000000000000000000E, B00000000000000000000016, B0000000000000000000001A, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		I00000000000000000000001 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = F00000000000000000000002 /* MacGlowCore */; targetProxy = J00000000000000000000001 /* PBXContainerItemProxy */; };
+		I00000000000000000000002 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = F00000000000000000000002 /* MacGlowCore */; targetProxy = J00000000000000000000002 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		H00000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 14.2; SDKROOT = macosx; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 6.0; }; name = Debug; };
+		H00000000000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 14.2; SDKROOT = macosx; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 6.0; }; name = Release; };
+		H00000000000000000000003 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = Configuration/MacGlow.entitlements; CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; CURRENT_PROJECT_VERSION = 1; ENABLE_HARDENED_RUNTIME = YES; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Configuration/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; MARKETING_VERSION = 0.1.0; PRODUCT_BUNDLE_IDENTIFIER = org.macglow.app; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_VERSION = 6.0; }; name = Debug; };
+		H00000000000000000000004 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = Configuration/MacGlow.entitlements; CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; CURRENT_PROJECT_VERSION = 1; ENABLE_HARDENED_RUNTIME = YES; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Configuration/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; MARKETING_VERSION = 0.1.0; PRODUCT_BUNDLE_IDENTIFIER = org.macglow.app; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; }; name = Release; };
+		H00000000000000000000005 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; DEFINES_MODULE = YES; DYLIB_COMPATIBILITY_VERSION = 1; DYLIB_CURRENT_VERSION = 1; DYLIB_INSTALL_NAME_BASE = "@rpath"; ENABLE_TESTABILITY = YES; GENERATE_INFOPLIST_FILE = YES; INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks"; PRODUCT_BUNDLE_IDENTIFIER = org.macglow.core; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 6.0; }; name = Debug; };
+		H00000000000000000000006 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; DEFINES_MODULE = YES; DYLIB_COMPATIBILITY_VERSION = 1; DYLIB_CURRENT_VERSION = 1; DYLIB_INSTALL_NAME_BASE = "@rpath"; GENERATE_INFOPLIST_FILE = YES; INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks"; PRODUCT_BUNDLE_IDENTIFIER = org.macglow.core; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 6.0; }; name = Release; };
+		H00000000000000000000007 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = ""; CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = org.macglow.coretests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 6.0; }; name = Debug; };
+		H00000000000000000000008 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = ""; CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = org.macglow.coretests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		G00000000000000000000001 /* Build configuration list for PBXProject "MacGlow" */ = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000001 /* Debug */, H00000000000000000000002 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		G00000000000000000000002 /* Build configuration list for PBXNativeTarget "MacGlow" */ = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000003 /* Debug */, H00000000000000000000004 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		G00000000000000000000003 /* Build configuration list for PBXNativeTarget "MacGlowCore" */ = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000005 /* Debug */, H00000000000000000000006 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		G00000000000000000000004 /* Build configuration list for PBXNativeTarget "MacGlowCoreTests" */ = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000007 /* Debug */, H00000000000000000000008 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000000000000000000001 /* Project object */;
+}
