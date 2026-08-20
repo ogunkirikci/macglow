@@ -21,18 +21,25 @@ final class NowPlayingController: ObservableObject {
     private var pollTimer: Timer?
     private var artworkTask: Task<Void, Never>?
     private var lastArtworkKey = ""
+    private var pendingArtworkKey = ""
 
     init(permissionStatus: PermissionStatusStore) {
         self.permissionStatus = permissionStatus
     }
 
     func configure(_ settings: MetadataSettings) {
+        let artworkConfigurationChanged = source != settings.source
+            || useArtworkColors != settings.useArtworkColors
         source = settings.source
         useArtworkColors = settings.useArtworkColors
         pollTimer?.invalidate()
         pollTimer = nil
         artworkTask?.cancel()
         artworkTask = nil
+        pendingArtworkKey = ""
+        if artworkConfigurationChanged {
+            lastArtworkKey = ""
+        }
 
         guard source != .disabled else {
             currentTrack = nil
@@ -53,6 +60,7 @@ final class NowPlayingController: ObservableObject {
         pollTimer = nil
         artworkTask?.cancel()
         artworkTask = nil
+        pendingArtworkKey = ""
     }
 
     private func poll() {
@@ -112,19 +120,30 @@ final class NowPlayingController: ObservableObject {
         guard useArtworkColors,
               let urlString = descriptor.atIndex(4)?.stringValue,
               let url = URL(string: urlString),
-              trackKey != lastArtworkKey else { return }
+              trackKey != lastArtworkKey,
+              trackKey != pendingArtworkKey else { return }
         let key = trackKey
-        lastArtworkKey = key
+        pendingArtworkKey = key
         artworkTask?.cancel()
         artworkTask = Task { [weak self] in
             guard let self else { return }
             do {
                 let (data, response) = try await URLSession.shared.data(from: url)
                 guard !Task.isCancelled,
-                      (response as? HTTPURLResponse)?.statusCode == 200 else { return }
-                self.publishPalette(from: data)
+                      (response as? HTTPURLResponse)?.statusCode == 200,
+                      self.source == .spotify,
+                      self.useArtworkColors,
+                      self.trackKey == key else {
+                    if self.pendingArtworkKey == key { self.pendingArtworkKey = "" }
+                    return
+                }
+                if self.publishPalette(from: data) {
+                    self.lastArtworkKey = key
+                }
+                if self.pendingArtworkKey == key { self.pendingArtworkKey = "" }
             } catch {
                 guard !Task.isCancelled else { return }
+                if self.pendingArtworkKey == key { self.pendingArtworkKey = "" }
                 self.statusText = "Track detected; artwork could not be loaded"
             }
         }
@@ -169,12 +188,14 @@ final class NowPlayingController: ObservableObject {
 
     private func processArtwork(_ data: Data, key: String) {
         guard key != lastArtworkKey else { return }
-        lastArtworkKey = key
-        publishPalette(from: data)
+        if publishPalette(from: data) {
+            lastArtworkKey = key
+        }
     }
 
-    private func publishPalette(from data: Data) {
-        guard let image = NSImage(data: data) else { return }
+    @discardableResult
+    private func publishPalette(from data: Data) -> Bool {
+        guard let image = NSImage(data: data) else { return false }
         let width = 48
         let height = 48
         guard let bitmap = NSBitmapImageRep(
@@ -188,7 +209,7 @@ final class NowPlayingController: ObservableObject {
             colorSpaceName: .deviceRGB,
             bytesPerRow: 0,
             bitsPerPixel: 0
-        ), let context = NSGraphicsContext(bitmapImageRep: bitmap) else { return }
+        ), let context = NSGraphicsContext(bitmapImageRep: bitmap) else { return false }
 
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = context
@@ -212,6 +233,8 @@ final class NowPlayingController: ObservableObject {
         let palette = DominantColorExtractor.palette(from: pixels)
         if !palette.isEmpty {
             onPalette?(palette)
+            return true
         }
+        return false
     }
 }
