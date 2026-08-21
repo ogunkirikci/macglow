@@ -15,38 +15,67 @@ jobs:
       DEVELOPMENT_TEAM: ${{ secrets.APPLE_TEAM_ID }}
       CODE_SIGN_IDENTITY: Developer ID Application
       NOTARY_KEYCHAIN_PROFILE: macglow-notary
+      SIGNED_RELEASE: ${{ secrets.APPLE_TEAM_ID != '' && secrets.APPLE_CERTIFICATE_BASE64 != '' && secrets.APPLE_CERTIFICATE_PASSWORD != '' && secrets.BUILD_KEYCHAIN_PASSWORD != '' && secrets.APPLE_ID != '' && secrets.APPLE_APP_PASSWORD != '' }}
     steps:
       - uses: actions/checkout@v4
-      - name: Import Developer ID certificate
+      - name: Select initial release mode
+        run: |
+          if [[ "$SIGNED_RELEASE" == "true" ]]; then
+            echo "Apple signing credentials detected; validating them before release"
+          else
+            echo "::warning::Apple signing credentials are unavailable; publishing an unsigned prerelease"
+          fi
+      - name: Prepare Developer ID signing
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           BUILD_KEYCHAIN_PASSWORD: ${{ secrets.BUILD_KEYCHAIN_PASSWORD }}
         run: |
+          [[ "$SIGNED_RELEASE" == "true" ]] || exit 0
+
+          use_unsigned_prerelease() {
+            echo "::warning::Developer ID certificate is unavailable or invalid; publishing an unsigned prerelease"
+            echo "SIGNED_RELEASE=false" >> "$GITHUB_ENV"
+            exit 0
+          }
+
           CERTIFICATE_PATH="$RUNNER_TEMP/developer-id.p12"
           KEYCHAIN_PATH="$RUNNER_TEMP/macglow-signing.keychain-db"
-          printf '%s' "$APPLE_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
-          security create-keychain -p "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-          security unlock-keychain -p "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security import "$CERTIFICATE_PATH" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
-          security set-key-partition-list -S apple-tool:,apple: -k "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          printf '%s' "$APPLE_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH" || use_unsigned_prerelease
+          security create-keychain -p "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" || use_unsigned_prerelease
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH" || use_unsigned_prerelease
+          security unlock-keychain -p "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" || use_unsigned_prerelease
+          security import "$CERTIFICATE_PATH" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH" || use_unsigned_prerelease
+          security set-key-partition-list -S apple-tool:,apple: -k "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" || use_unsigned_prerelease
+          security list-keychain -d user -s "$KEYCHAIN_PATH" || use_unsigned_prerelease
       - name: Configure notarization
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
-        run: >-
-          xcrun notarytool store-credentials "$NOTARY_KEYCHAIN_PROFILE"
-          --apple-id "$APPLE_ID"
-          --team-id "$DEVELOPMENT_TEAM"
-          --password "$APPLE_APP_PASSWORD"
+        run: |
+          [[ "$SIGNED_RELEASE" == "true" ]] || exit 0
+          if ! xcrun notarytool store-credentials "$NOTARY_KEYCHAIN_PROFILE" \
+            --apple-id "$APPLE_ID" \
+            --team-id "$DEVELOPMENT_TEAM" \
+            --password "$APPLE_APP_PASSWORD"; then
+            echo "::warning::Notarization credentials are invalid; publishing an unsigned prerelease"
+            echo "SIGNED_RELEASE=false" >> "$GITHUB_ENV"
+          fi
       - name: Build installer, archive, and checksums
         env:
           VERSION: ${{ github.ref_name }}
         run: |
-          PUBLIC_RELEASE=1 VERSION=${VERSION#v} ./scripts/release.sh
+          if [[ "$SIGNED_RELEASE" == "true" ]]; then
+            PUBLIC_RELEASE=1 VERSION=${VERSION#v} ./scripts/release.sh
+          else
+            PUBLIC_RELEASE=0 VERSION=${VERSION#v} ./scripts/release.sh
+          fi
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" Artifacts/* --generate-notes
+        run: |
+          if [[ "$SIGNED_RELEASE" == "true" ]]; then
+            gh release create "${GITHUB_REF_NAME}" Artifacts/* --generate-notes
+          else
+            gh release create "${GITHUB_REF_NAME}" Artifacts/* --generate-notes --prerelease
+          fi

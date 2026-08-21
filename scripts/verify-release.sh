@@ -39,8 +39,8 @@ for REQUIRED_ARCHITECTURE in arm64 x86_64; do
   }
 done
 
-SIGNING_INFO=$(codesign -dv --verbose=4 "$APP_PATH" 2>&1)
 if [[ ${REQUIRE_SIGNED:-0} == 1 ]]; then
+  SIGNING_INFO=$(codesign -dv --verbose=4 "$APP_PATH" 2>&1)
   codesign --verify --deep --strict --verbose=2 "$APP_PATH"
   [[ $SIGNING_INFO == *"Authority=Developer ID Application:"* ]] || {
     print -u2 "The app is not signed with a Developer ID Application certificate."

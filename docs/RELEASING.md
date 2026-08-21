@@ -29,9 +29,11 @@ is not considered public until `codesign --verify --deep --strict`,
 `spctl --assess --type execute`, and `xcrun stapler validate` all succeed.
 
 Pushing a `v*` tag runs the GitHub workflow and publishes the DMG, ZIP, and
-checksums. The repository must define the protected Actions secrets
+checksums. When publishing a signed release, the repository must define the
+protected Actions secrets
 `APPLE_CERTIFICATE_BASE64`, `APPLE_CERTIFICATE_PASSWORD`,
 `BUILD_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_APP_PASSWORD`, and
-`APPLE_TEAM_ID`. The workflow refuses to publish an unsigned or unnotarized
-package. A correctly notarized DMG opens on other Macs without asking users to
-remove the quarantine attribute.
+`APPLE_TEAM_ID`. When any signing credential is unavailable or invalid, the
+workflow skips signing and notarization and marks the GitHub release as a
+prerelease. A correctly notarized DMG opens on other Macs without asking users
+to remove the quarantine attribute.
