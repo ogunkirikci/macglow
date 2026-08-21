@@ -115,6 +115,7 @@ final class GlowSettings: ObservableObject {
         static let rightColor = "glow.color.right"
         static let bottomColor = "glow.color.bottom"
         static let leftColor = "glow.color.left"
+        static let selectedPreset = "glow.selectedPreset"
     }
 
     private enum Defaults {
@@ -137,11 +138,17 @@ final class GlowSettings: ObservableObject {
     }
 
     @Published var intensity: Double {
-        didSet { save(intensity, forKey: Key.intensity) }
+        didSet {
+            clearSelectedPreset()
+            save(intensity, forKey: Key.intensity)
+        }
     }
 
     @Published var spread: Double {
-        didSet { save(spread, forKey: Key.spread) }
+        didSet {
+            clearSelectedPreset()
+            save(spread, forKey: Key.spread)
+        }
     }
 
     @Published var notchCompatibility: Bool {
@@ -163,15 +170,24 @@ final class GlowSettings: ObservableObject {
     }
 
     @Published var audioAttack: Double {
-        didSet { saveAudioResponse(audioAttack, forKey: Key.audioAttack) }
+        didSet {
+            clearSelectedPreset()
+            saveAudioResponse(audioAttack, forKey: Key.audioAttack)
+        }
     }
 
     @Published var audioRelease: Double {
-        didSet { saveAudioResponse(audioRelease, forKey: Key.audioRelease) }
+        didSet {
+            clearSelectedPreset()
+            saveAudioResponse(audioRelease, forKey: Key.audioRelease)
+        }
     }
 
     @Published var audioGain: Double {
-        didSet { saveAudioResponse(audioGain, forKey: Key.audioGain) }
+        didSet {
+            clearSelectedPreset()
+            saveAudioResponse(audioGain, forKey: Key.audioGain)
+        }
     }
 
     @Published var hideWhenIdle: Bool {
@@ -201,19 +217,41 @@ final class GlowSettings: ObservableObject {
     }
 
     @Published var topColor: NSColor {
-        didSet { save(topColor, forKey: Key.topColor) }
+        didSet {
+            clearSelectedPreset()
+            save(topColor, forKey: Key.topColor)
+        }
     }
 
     @Published var rightColor: NSColor {
-        didSet { save(rightColor, forKey: Key.rightColor) }
+        didSet {
+            clearSelectedPreset()
+            save(rightColor, forKey: Key.rightColor)
+        }
     }
 
     @Published var bottomColor: NSColor {
-        didSet { save(bottomColor, forKey: Key.bottomColor) }
+        didSet {
+            clearSelectedPreset()
+            save(bottomColor, forKey: Key.bottomColor)
+        }
     }
 
     @Published var leftColor: NSColor {
-        didSet { save(leftColor, forKey: Key.leftColor) }
+        didSet {
+            clearSelectedPreset()
+            save(leftColor, forKey: Key.leftColor)
+        }
+    }
+
+    @Published private(set) var selectedPreset: GlowPreset? {
+        didSet {
+            if let selectedPreset {
+                userDefaults.set(selectedPreset.rawValue, forKey: Key.selectedPreset)
+            } else {
+                userDefaults.removeObject(forKey: Key.selectedPreset)
+            }
+        }
     }
 
     var onChange: ((GlowAppearance) -> Void)?
@@ -248,6 +286,8 @@ final class GlowSettings: ObservableObject {
         rightColor = Self.color(forKey: Key.rightColor, in: userDefaults) ?? Defaults.rightColor
         bottomColor = Self.color(forKey: Key.bottomColor, in: userDefaults) ?? Defaults.bottomColor
         leftColor = Self.color(forKey: Key.leftColor, in: userDefaults) ?? Defaults.leftColor
+        selectedPreset = userDefaults.string(forKey: Key.selectedPreset)
+            .flatMap(GlowPreset.init(rawValue:))
     }
 
     var appearance: GlowAppearance {
@@ -437,6 +477,7 @@ final class GlowSettings: ObservableObject {
             audioRelease = 0.08
             audioGain = 3.0
         }
+        selectedPreset = preset
     }
 
     func exportPresetData(named name: String = "Custom") throws -> Data {
@@ -487,7 +528,14 @@ final class GlowSettings: ObservableObject {
     func applyArtworkPalette(_ palette: [MacGlowCore.RGBColor]) {
         guard !palette.isEmpty else { return }
         let colors = palette.map {
-            NSColor(srgbRed: $0.red, green: $0.green, blue: $0.blue, alpha: 1)
+            let brightestChannel = max($0.red, $0.green, $0.blue)
+            let scale = brightestChannel > 0 ? max(1, 0.35 / brightestChannel) : 1
+            return NSColor(
+                srgbRed: min($0.red * scale, 1),
+                green: min($0.green * scale, 1),
+                blue: min($0.blue * scale, 1),
+                alpha: 1
+            )
         }
         topColor = colors[0]
         rightColor = colors[min(1, colors.count - 1)]
@@ -498,6 +546,10 @@ final class GlowSettings: ObservableObject {
     private func save(_ value: Double, forKey key: String) {
         userDefaults.set(value, forKey: key)
         notifyChange()
+    }
+
+    private func clearSelectedPreset() {
+        selectedPreset = nil
     }
 
     private func saveAudioResponse(_ value: Double, forKey key: String) {

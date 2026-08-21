@@ -10,6 +10,13 @@ APP_PATH=$DERIVED_DATA/Build/Products/Release/MacGlow.app
 ZIP_PATH=$OUTPUT_DIR/MacGlow-$VERSION.zip
 DMG_PATH=$OUTPUT_DIR/MacGlow-$VERSION.dmg
 
+if [[ ${PUBLIC_RELEASE:-0} == 1 ]]; then
+  [[ -n ${DEVELOPMENT_TEAM:-} && -n ${CODE_SIGN_IDENTITY:-} && -n ${NOTARY_KEYCHAIN_PROFILE:-} ]] || {
+    print -u2 "Public releases require Developer ID signing and notarization."
+    exit 1
+  }
+fi
+
 mkdir -p "$OUTPUT_DIR"
 
 BUILD_ARGUMENTS=(

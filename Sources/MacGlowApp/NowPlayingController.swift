@@ -14,6 +14,7 @@ final class NowPlayingController: ObservableObject {
     @Published private(set) var statusText = "Metadata is off"
 
     var onPalette: (([MacGlowCore.RGBColor]) -> Void)?
+    var onTrackChange: ((NowPlayingTrack?) -> Void)?
 
     private let permissionStatus: PermissionStatusStore
     private var source = MetadataSource.disabled
@@ -22,14 +23,20 @@ final class NowPlayingController: ObservableObject {
     private var artworkTask: Task<Void, Never>?
     private var lastArtworkKey = ""
     private var pendingArtworkKey = ""
+    private var isConfigured = false
 
     init(permissionStatus: PermissionStatusStore) {
         self.permissionStatus = permissionStatus
     }
 
     func configure(_ settings: MetadataSettings) {
+        guard !isConfigured
+                || source != settings.source
+                || useArtworkColors != settings.useArtworkColors else { return }
+
         let artworkConfigurationChanged = source != settings.source
             || useArtworkColors != settings.useArtworkColors
+        isConfigured = true
         source = settings.source
         useArtworkColors = settings.useArtworkColors
         pollTimer?.invalidate()
@@ -42,7 +49,7 @@ final class NowPlayingController: ObservableObject {
         }
 
         guard source != .disabled else {
-            currentTrack = nil
+            setCurrentTrack(nil)
             statusText = "Metadata is off"
             permissionStatus.automation = .notRequested
             permissionStatus.automationDetail = nil
@@ -56,6 +63,7 @@ final class NowPlayingController: ObservableObject {
     }
 
     func stop() {
+        isConfigured = false
         pollTimer?.invalidate()
         pollTimer = nil
         artworkTask?.cancel()
@@ -76,7 +84,7 @@ final class NowPlayingController: ObservableObject {
 
     private func pollMusic() {
         guard !NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.Music").isEmpty else {
-            currentTrack = nil
+            setCurrentTrack(nil)
             statusText = "Music is not running"
             return
         }
@@ -102,7 +110,7 @@ final class NowPlayingController: ObservableObject {
 
     private func pollSpotify() {
         guard !NSRunningApplication.runningApplications(withBundleIdentifier: "com.spotify.client").isEmpty else {
-            currentTrack = nil
+            setCurrentTrack(nil)
             statusText = "Spotify is not running"
             return
         }
@@ -169,16 +177,32 @@ final class NowPlayingController: ObservableObject {
 
     private func updateTrack(from descriptor: NSAppleEventDescriptor, sourceName: String) {
         guard let title = descriptor.atIndex(1)?.stringValue, !title.isEmpty else {
-            currentTrack = nil
+            setCurrentTrack(nil)
             statusText = "\(sourceName) is not playing"
             return
         }
-        currentTrack = NowPlayingTrack(
+        setCurrentTrack(NowPlayingTrack(
             title: title,
             artist: descriptor.atIndex(2)?.stringValue ?? "",
             album: descriptor.atIndex(3)?.stringValue ?? ""
-        )
+        ))
         statusText = "Connected to \(sourceName)"
+    }
+
+    private func setCurrentTrack(_ track: NowPlayingTrack?) {
+        guard currentTrack != track else { return }
+        let identityChanged = trackIdentity(currentTrack) != trackIdentity(track)
+        currentTrack = track
+        if identityChanged {
+            onTrackChange?(track)
+        }
+    }
+
+    private func trackIdentity(_ track: NowPlayingTrack?) -> String {
+        guard let track else { return "" }
+        return [track.title, track.artist]
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            .joined(separator: "|")
     }
 
     private var trackKey: String {

@@ -11,13 +11,41 @@ permissions:
 jobs:
   package:
     runs-on: macos-15
+    env:
+      DEVELOPMENT_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+      CODE_SIGN_IDENTITY: Developer ID Application
+      NOTARY_KEYCHAIN_PROFILE: macglow-notary
     steps:
       - uses: actions/checkout@v4
+      - name: Import Developer ID certificate
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          BUILD_KEYCHAIN_PASSWORD: ${{ secrets.BUILD_KEYCHAIN_PASSWORD }}
+        run: |
+          CERTIFICATE_PATH="$RUNNER_TEMP/developer-id.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/macglow-signing.keychain-db"
+          printf '%s' "$APPLE_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+          security create-keychain -p "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERTIFICATE_PATH" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$BUILD_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+      - name: Configure notarization
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: >-
+          xcrun notarytool store-credentials "$NOTARY_KEYCHAIN_PROFILE"
+          --apple-id "$APPLE_ID"
+          --team-id "$DEVELOPMENT_TEAM"
+          --password "$APPLE_APP_PASSWORD"
       - name: Build installer, archive, and checksums
         env:
           VERSION: ${{ github.ref_name }}
         run: |
-          VERSION=${VERSION#v} ./scripts/release.sh
+          PUBLIC_RELEASE=1 VERSION=${VERSION#v} ./scripts/release.sh
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}

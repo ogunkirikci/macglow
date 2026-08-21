@@ -101,7 +101,7 @@ final class GlowOverlayController {
 
     private func makePanel(for screen: NSScreen) -> NSPanel {
         let panel = NSPanel(
-            contentRect: screen.frame,
+            contentRect: NSRect(origin: .zero, size: screen.frame.size),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false,

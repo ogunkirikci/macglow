@@ -27,11 +27,17 @@ struct SettingsView: View {
                     HStack {
                         Text("Preset")
                         Spacer()
-                        Menu("Choose Preset") {
+                        Menu(settings.selectedPreset?.title ?? "Choose Preset") {
                             ForEach(GlowPreset.allCases) { preset in
-                                Button(preset.title) {
+                                Button {
                                     settings.applyPreset(preset)
                                     previewGlow()
+                                } label: {
+                                    if settings.selectedPreset == preset {
+                                        Label(preset.title, systemImage: "checkmark")
+                                    } else {
+                                        Text(preset.title)
+                                    }
                                 }
                             }
                         }

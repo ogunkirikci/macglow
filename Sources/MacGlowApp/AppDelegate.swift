@@ -4,6 +4,7 @@ import AppKit
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private static let anyInputEventType = CGEventType(rawValue: UInt32.max)!
     private let musicReactiveFloor = 0.12
+    private let recentAudioGracePeriod: TimeInterval = 12
     private let settings = GlowSettings()
     private let displayCatalog = DisplayCatalog()
     private let permissionStatus = PermissionStatusStore()
@@ -36,6 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var temporaryPreviewEndDate = Date.distantPast
     private var isPausedForSleep = false
     private var lifecycleTimer: Timer?
+    private var lastAudibleAudioDate = Date.distantPast
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         configureStatusItem()
@@ -56,6 +58,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             guard self?.settings.useArtworkColors == true else { return }
             self?.settings.applyArtworkPalette(palette)
         }
+        nowPlaying.onTrackChange = { [weak self] track in
+            self?.handleTrackChange(track)
+        }
         observeWorkspaceLifecycle()
         startLifecycleMonitoring()
         nowPlaying.configure(settings.metadata)
@@ -70,6 +75,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         settings.onLifecycleChange = nil
         settings.onMetadataChange = nil
         nowPlaying.onPalette = nil
+        nowPlaying.onTrackChange = nil
         nowPlaying.stop()
         lifecycleTimer?.invalidate()
         NSWorkspace.shared.notificationCenter.removeObserver(self)
@@ -167,6 +173,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         capture.onFeatures = { [weak self] features in
             Task { @MainActor in
                 guard let self else { return }
+                if features.level > 0.01 {
+                    self.lastAudibleAudioDate = Date()
+                }
                 self.overlayController.update(
                     level: max(Double(features.level), self.musicReactiveFloor)
                 )
@@ -331,6 +340,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         capture.updateResponse(response)
     }
 
+    private func handleTrackChange(_ track: NowPlayingTrack?) {
+        guard track != nil,
+              settings.animationMode == .musicReactive,
+              !isPausedForSleep else { return }
+        lastAudibleAudioDate = Date()
+    }
+
     private func observeWorkspaceLifecycle() {
         let center = NSWorkspace.shared.notificationCenter
         center.addObserver(
@@ -377,8 +393,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let isIdle = policy.hideWhenIdle
             && idleSeconds.isFinite
             && idleSeconds >= policy.idleDelay
+            && !isAudioRecentlyActive
         let isFullScreen = policy.hideInFullScreen && frontmostApplicationIsFullScreen()
         overlayController.setLifecycleSuppressed(isIdle || isFullScreen)
+    }
+
+    private var isAudioRecentlyActive: Bool {
+        settings.animationMode == .musicReactive
+            && Date().timeIntervalSince(lastAudibleAudioDate) < recentAudioGracePeriod
     }
 
     private func frontmostApplicationIsFullScreen() -> Bool {
