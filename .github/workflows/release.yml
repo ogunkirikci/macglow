@@ -68,7 +68,12 @@ jobs:
           if [[ "$SIGNED_RELEASE" == "true" ]]; then
             PUBLIC_RELEASE=1 VERSION=${VERSION#v} ./scripts/release.sh
           else
-            PUBLIC_RELEASE=0 VERSION=${VERSION#v} ./scripts/release.sh
+            DEVELOPMENT_TEAM= \
+              CODE_SIGN_IDENTITY= \
+              NOTARY_KEYCHAIN_PROFILE= \
+              PUBLIC_RELEASE=0 \
+              VERSION=${VERSION#v} \
+              ./scripts/release.sh
           fi
       - name: Publish GitHub release
         env:
