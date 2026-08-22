@@ -139,14 +139,12 @@ final class GlowSettings: ObservableObject {
 
     @Published var intensity: Double {
         didSet {
-            clearSelectedPreset()
             save(intensity, forKey: Key.intensity)
         }
     }
 
     @Published var spread: Double {
         didSet {
-            clearSelectedPreset()
             save(spread, forKey: Key.spread)
         }
     }
@@ -171,21 +169,18 @@ final class GlowSettings: ObservableObject {
 
     @Published var audioAttack: Double {
         didSet {
-            clearSelectedPreset()
             saveAudioResponse(audioAttack, forKey: Key.audioAttack)
         }
     }
 
     @Published var audioRelease: Double {
         didSet {
-            clearSelectedPreset()
             saveAudioResponse(audioRelease, forKey: Key.audioRelease)
         }
     }
 
     @Published var audioGain: Double {
         didSet {
-            clearSelectedPreset()
             saveAudioResponse(audioGain, forKey: Key.audioGain)
         }
     }
@@ -478,6 +473,9 @@ final class GlowSettings: ObservableObject {
             audioGain = 3.0
         }
         selectedPreset = preset
+        if animationMode != .musicReactive {
+            animationMode = .musicReactive
+        }
     }
 
     func exportPresetData(named name: String = "Custom") throws -> Data {
@@ -523,6 +521,7 @@ final class GlowSettings: ObservableObject {
         audioAttack = min(max(preset.audioAttack, 0.05), 1)
         audioRelease = min(max(preset.audioRelease, 0.02), 0.5)
         audioGain = min(max(preset.audioGain, 1), 8)
+        selectedPreset = nil
     }
 
     func applyArtworkPalette(_ palette: [MacGlowCore.RGBColor]) {

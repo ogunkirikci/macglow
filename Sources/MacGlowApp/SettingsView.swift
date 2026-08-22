@@ -31,7 +31,6 @@ struct SettingsView: View {
                             ForEach(GlowPreset.allCases) { preset in
                                 Button {
                                     settings.applyPreset(preset)
-                                    previewGlow()
                                 } label: {
                                     if settings.selectedPreset == preset {
                                         Label(preset.title, systemImage: "checkmark")

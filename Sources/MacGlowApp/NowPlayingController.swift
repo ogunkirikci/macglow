@@ -1,4 +1,5 @@
 import AppKit
+import ApplicationServices
 import Combine
 import MacGlowCore
 
@@ -24,6 +25,7 @@ final class NowPlayingController: ObservableObject {
     private var lastArtworkKey = ""
     private var pendingArtworkKey = ""
     private var isConfigured = false
+    private var authorizationPromptedSources: Set<MetadataSource> = []
 
     init(permissionStatus: PermissionStatusStore) {
         self.permissionStatus = permissionStatus
@@ -158,6 +160,8 @@ final class NowPlayingController: ObservableObject {
     }
 
     private func execute(_ source: String) -> NSAppleEventDescriptor? {
+        guard authorizeAutomationIfNeeded() else { return nil }
+
         var errorInfo: NSDictionary?
         let descriptor = NSAppleScript(source: source)?.executeAndReturnError(&errorInfo)
         if let errorInfo {
@@ -173,6 +177,39 @@ final class NowPlayingController: ObservableObject {
         permissionStatus.automation = .granted
         permissionStatus.automationDetail = "MacGlow can read the current track from the selected app."
         return descriptor
+    }
+
+    private func authorizeAutomationIfNeeded() -> Bool {
+        guard let bundleIdentifier = source.bundleIdentifier else {
+            return false
+        }
+        let target = NSAppleEventDescriptor(bundleIdentifier: bundleIdentifier)
+
+        let shouldPrompt = authorizationPromptedSources.insert(source).inserted
+        let status = AEDeterminePermissionToAutomateTarget(
+            target.aeDesc,
+            typeWildCard,
+            typeWildCard,
+            shouldPrompt
+        )
+
+        switch status {
+        case noErr:
+            permissionStatus.automation = .granted
+            permissionStatus.automationDetail = "MacGlow can read the current track from the selected app."
+            return true
+        case OSStatus(errAEEventWouldRequireUserConsent):
+            permissionStatus.automation = .notRequested
+            permissionStatus.automationDetail = "Automation access has not been granted for the selected music app."
+        case OSStatus(errAEEventNotPermitted):
+            permissionStatus.automation = .needsAttention
+            permissionStatus.automationDetail = "Allow MacGlow to control the selected music app in Privacy & Security → Automation."
+        default:
+            permissionStatus.automation = .unavailable
+            permissionStatus.automationDetail = "The selected music app is not available for metadata access."
+        }
+        statusText = permissionStatus.automationDetail ?? "Metadata unavailable"
+        return false
     }
 
     private func updateTrack(from descriptor: NSAppleEventDescriptor, sourceName: String) {
@@ -260,5 +297,15 @@ final class NowPlayingController: ObservableObject {
             return true
         }
         return false
+    }
+}
+
+private extension MetadataSource {
+    var bundleIdentifier: String? {
+        switch self {
+        case .disabled: nil
+        case .music: "com.apple.Music"
+        case .spotify: "com.spotify.client"
+        }
     }
 }
