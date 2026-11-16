@@ -25,6 +25,10 @@ let package = Package(
         .testTarget(
             name: "MacGlowCoreTests",
             dependencies: ["MacGlowCore"]
+        ),
+        .testTarget(
+            name: "MacGlowAppTests",
+            dependencies: ["MacGlowApp"]
         )
     ]
 )

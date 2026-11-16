@@ -155,6 +155,7 @@ final class GlowSettings: ObservableObject {
 
     @Published var animationMode: GlowAnimationMode {
         didSet {
+            guard animationMode != oldValue else { return }
             userDefaults.set(animationMode.rawValue, forKey: Key.animationMode)
             onAnimationModeChange?(animationMode)
         }

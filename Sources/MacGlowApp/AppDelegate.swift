@@ -159,6 +159,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func startSystemAudioCapture() {
+        guard audioCapture == nil else { return }
         stopPreviewSignal()
         overlayController.update(level: musicReactiveFloor)
 
@@ -170,9 +171,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let capture = SystemAudioCapture()
         capture.updateResponse(settings.audioResponse)
-        capture.onFeatures = { [weak self] features in
+        capture.onFeatures = { [weak self, weak capture] features in
             Task { @MainActor in
-                guard let self else { return }
+                guard let self, let capture, self.audioCapture === capture else { return }
                 if features.level > 0.01 {
                     self.lastAudibleAudioDate = Date()
                 }
@@ -181,9 +182,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 )
             }
         }
-        capture.onStateChange = { [weak self] state in
+        capture.onStateChange = { [weak self, weak capture] state in
             Task { @MainActor in
-                self?.handleAudioState(state)
+                guard let self, let capture, self.audioCapture === capture else { return }
+                self.handleAudioState(state)
             }
         }
         audioCapture = capture
@@ -303,7 +305,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func retryAudioCapture() {
-        settings.animationMode = .musicReactive
+        if settings.animationMode == .musicReactive {
+            applyAnimationMode(.musicReactive)
+        } else {
+            settings.animationMode = .musicReactive
+        }
     }
 
     @objc private func openAudioPrivacySettings() {

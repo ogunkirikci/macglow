@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0000000000000000000001C /* SingleInstanceLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000001E /* SingleInstanceLock.swift */; };
 		B00000000000000000000001 /* AudioFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000001 /* AudioFeatures.swift */; };
 		B00000000000000000000002 /* AudioFrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000002 /* AudioFrameAnalyzer.swift */; };
 		B00000000000000000000003 /* GlowConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000003 /* GlowConfiguration.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C0000000000000000000001E /* SingleInstanceLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstanceLock.swift; sourceTree = "<group>"; };
 		C00000000000000000000001 /* AudioFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFeatures.swift; sourceTree = "<group>"; };
 		C00000000000000000000002 /* AudioFrameAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFrameAnalyzer.swift; sourceTree = "<group>"; };
 		C00000000000000000000003 /* GlowConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowConfiguration.swift; sourceTree = "<group>"; };
@@ -120,7 +122,7 @@
 		};
 		D00000000000000000000002 /* Sources */ = {isa = PBXGroup; children = (D00000000000000000000003 /* MacGlowCore */, D00000000000000000000004 /* MacGlowApp */, ); path = Sources; sourceTree = "<group>"; };
 		D00000000000000000000003 /* MacGlowCore */ = {isa = PBXGroup; children = (C00000000000000000000001 /* AudioFeatures.swift */, C00000000000000000000002 /* AudioFrameAnalyzer.swift */, C00000000000000000000003 /* GlowConfiguration.swift */, C00000000000000000000017 /* GlowPresetFile.swift */, C0000000000000000000001B /* DominantColorExtractor.swift */, ); path = MacGlowCore; sourceTree = "<group>"; };
-		D00000000000000000000004 /* MacGlowApp */ = {isa = PBXGroup; children = (C00000000000000000000004 /* main.swift */, C00000000000000000000005 /* AppDelegate.swift */, C00000000000000000000006 /* GlowOverlayController.swift */, C00000000000000000000007 /* GlowOverlayView.swift */, C00000000000000000000019 /* MetalGlowView.swift */, C00000000000000000000008 /* SystemAudioCapture.swift */, C0000000000000000000001A /* NowPlayingController.swift */, C00000000000000000000009 /* GlowSettings.swift */, C0000000000000000000000A /* SettingsView.swift */, C0000000000000000000000B /* SettingsWindowController.swift */, C0000000000000000000000C /* PrivacySettings.swift */, C00000000000000000000015 /* DisplayCatalog.swift */, C00000000000000000000016 /* LaunchAtLoginController.swift */, ); path = MacGlowApp; sourceTree = "<group>"; };
+		D00000000000000000000004 /* MacGlowApp */ = {isa = PBXGroup; children = (C00000000000000000000004 /* main.swift */, C0000000000000000000001E /* SingleInstanceLock.swift */, C00000000000000000000005 /* AppDelegate.swift */, C00000000000000000000006 /* GlowOverlayController.swift */, C00000000000000000000007 /* GlowOverlayView.swift */, C00000000000000000000019 /* MetalGlowView.swift */, C00000000000000000000008 /* SystemAudioCapture.swift */, C0000000000000000000001A /* NowPlayingController.swift */, C00000000000000000000009 /* GlowSettings.swift */, C0000000000000000000000A /* SettingsView.swift */, C0000000000000000000000B /* SettingsWindowController.swift */, C0000000000000000000000C /* PrivacySettings.swift */, C00000000000000000000015 /* DisplayCatalog.swift */, C00000000000000000000016 /* LaunchAtLoginController.swift */, ); path = MacGlowApp; sourceTree = "<group>"; };
 		D00000000000000000000005 /* Tests */ = {isa = PBXGroup; children = (D00000000000000000000009 /* MacGlowCoreTests */, ); path = Tests; sourceTree = "<group>"; };
 		D00000000000000000000006 /* Products */ = {isa = PBXGroup; children = (C00000000000000000000011 /* MacGlow.app */, C00000000000000000000012 /* MacGlowCore.framework */, C00000000000000000000013 /* MacGlowCoreTests.xctest */, ); name = Products; sourceTree = "<group>"; };
 		D00000000000000000000007 /* Configuration */ = {isa = PBXGroup; children = (C0000000000000000000000F /* Info.plist */, C00000000000000000000010 /* MacGlow.entitlements */, ); path = Configuration; sourceTree = "<group>"; };
@@ -202,7 +204,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E00000000000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000004, B00000000000000000000005, B00000000000000000000006, B00000000000000000000007, B00000000000000000000017, B00000000000000000000008, B00000000000000000000018, B00000000000000000000009, B0000000000000000000000A, B0000000000000000000000B, B0000000000000000000000C, B00000000000000000000013, B00000000000000000000014, ); runOnlyForDeploymentPostprocessing = 0; };
+		E00000000000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B0000000000000000000001C, B00000000000000000000004, B00000000000000000000005, B00000000000000000000006, B00000000000000000000007, B00000000000000000000017, B00000000000000000000008, B00000000000000000000018, B00000000000000000000009, B0000000000000000000000A, B0000000000000000000000B, B0000000000000000000000C, B00000000000000000000013, B00000000000000000000014, ); runOnlyForDeploymentPostprocessing = 0; };
 		E00000000000000000000005 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000001, B00000000000000000000002, B00000000000000000000003, B00000000000000000000015, B00000000000000000000019, ); runOnlyForDeploymentPostprocessing = 0; };
 		E00000000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B0000000000000000000000D, B0000000000000000000000E, B00000000000000000000016, B0000000000000000000001A, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
