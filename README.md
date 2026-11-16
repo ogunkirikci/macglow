@@ -46,6 +46,26 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
   -configuration Debug -derivedDataPath Build/DerivedData build
 ```
 
+## Repeated System Audio Recording prompts
+
+Install MacGlow in `/Applications` and launch that copy rather than the copy
+on the mounted DMG. Keep a single MacGlow entry in System Settings → General →
+Login Items. MacGlow also takes a per-user instance lock before starting audio
+capture so concurrent launches cannot create two capture sessions.
+
+If permission is requested again after every login, report your macOS version,
+MacGlow version, installation location, and whether Launch at Login is enabled
+in [issue #2](https://github.com/ogunkirikci/macglow/issues/2). Check MacGlow in
+System Settings → Privacy & Security → Screen & System Audio Recording (the
+label varies by macOS version). Steady and Pulse modes do not need system audio.
+
+Unsigned/ad-hoc prereleases may have unreliable permission persistence,
+especially when replacing or rebuilding the app. A stable Developer ID signing
+identity is needed for consistent identity across updates; see
+[Apple’s explanation of privacy permissions and designated requirements](https://developer.apple.com/documentation/technotes/tn3127-inside-code-signing-requirements).
+The startup guards address duplicate capture attempts; a reboot on an affected
+Mac is still needed to verify the reported permission loop.
+
 ## Test
 
 ```sh
